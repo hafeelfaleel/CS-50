@@ -1,0 +1,78 @@
+#include <cs50.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+
+int main(int argc, string argv[])
+{
+    // Check for exactly one command-line argument
+    if (argc != 2)
+    {
+        printf("Usage: ./substitution key\n");
+        return 1;
+    }
+
+    string key = argv[1];
+
+    // Check key length
+    if (strlen(key) != 26)
+    {
+        printf("Key must contain 26 characters.\n");
+        return 1;
+    }
+
+    // Check that key contains only letters and no duplicates
+    bool used[26] = {false};
+
+    for (int i = 0; i < 26; i++)
+    {
+        if (!isalpha(key[i]))
+        {
+            printf("Key must only contain alphabetic characters.\n");
+            return 1;
+        }
+
+        int index = tolower(key[i]) - 'a';
+
+        if (used[index])
+        {
+            printf("Key must not contain duplicate letters.\n");
+            return 1;
+        }
+
+        used[index] = true;
+    }
+
+    // Get plaintext
+    string plaintext = get_string("plaintext: ");
+
+    printf("ciphertext: ");
+
+    // Encrypt plaintext
+    for (int i = 0, len = strlen(plaintext); i < len; i++)
+    {
+        char c = plaintext[i];
+
+        if (isalpha(c))
+        {
+            int index = tolower(c) - 'a';
+            char substituted = key[index];
+
+            if (isupper(c))
+            {
+                printf("%c", toupper(substituted));
+            }
+            else
+            {
+                printf("%c", tolower(substituted));
+            }
+        }
+        else
+        {
+            printf("%c", c);
+        }
+    }
+
+    printf("\n");
+    return 0;
+}
